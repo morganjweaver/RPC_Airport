@@ -9,6 +9,7 @@ struct airport_node{
 	airport_list next; 
 };
 
+/*this may be unnecessary if we store city and state as a single string*/
 struct city_state{
 	string city;
 	string state; 
