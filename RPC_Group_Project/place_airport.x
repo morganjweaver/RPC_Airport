@@ -2,12 +2,20 @@
 typedef struct airport_node* airport_list;
 
 struct airport_node{
-string code;
-string name;
-string state;
-string distance;
+	string code;
+	string name;
+	string state;
+	string distance;
 
-airport_list next; };
+	airport_list next; 
+};
+
+struct lat_long_input{
+	float lat;
+	float long;
+};
+
+
 // If user inputs invalid city/state,
 // return NULLptr and interpret on client end.
 union airport_ret switch (int err){
@@ -21,6 +29,6 @@ union airport_ret switch (int err){
 /*IDL program*/ 
 program DIRPROG {
 	version DIR_VERS {
-		airport_ret airport_lookup(float lat, float long ) = 1;
+		airport_ret airport_lookup(lat_long_input ll_input) = 1;
 	} = 1;
 } = 0x31717172;
