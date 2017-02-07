@@ -9,11 +9,6 @@ struct airport_node{
 	airport_list next; 
 };
 
-/*this may be unnecessary if we store city and state as a single string*/
-struct city_state{
-	string city;
-	string state; 
-};
 
 // If user inputs invalid city/state, 
 // return NULLptr and interpret on client end.
@@ -27,6 +22,6 @@ union airport_ret switch (int err){
 /*IDL program*/ 
 program DIRPROG {
 	version DIR_VERS {
-		airport_ret lat_longt_lookup(city_state cs_input) = 1;
+		airport_ret lat_longt_lookup(string city_state) = 1;
 	} = 1;
 } = 0x31717171;
