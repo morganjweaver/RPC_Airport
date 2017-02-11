@@ -4,29 +4,15 @@
  * as a guideline for developing your own functions.
  */
 
-#include "place_airport.h"
 #include "client_place.h"
 
-/*for when file acts as a server*/
-airport_ret *
-lat_longt_lookup_1_svc(char **argp, struct svc_req *rqstp)
-{
-	static airport_ret  result;
 
-	/*
-	 * insert server code here
-	 */
-
-	return &result;
-}
-
-/*for when it acts as a client*/
 void
 dirprog_1(char *host)
 {
 	CLIENT *clnt;
 	airport_ret  *result_1;
-	lat_long_input  airport_lookup_1_arg;
+	char * lat_longt_lookup_1_arg;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, DIRPROG, DIR_VERS, "udp");
@@ -36,7 +22,7 @@ dirprog_1(char *host)
 	}
 #endif	/* DEBUG */
 
-	result_1 = airport_lookup_1(&airport_lookup_1_arg, clnt);
+	result_1 = lat_longt_lookup_1(&lat_longt_lookup_1_arg, clnt);
 	if (result_1 == (airport_ret *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
