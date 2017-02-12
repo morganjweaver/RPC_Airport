@@ -7,7 +7,7 @@
 #include "place_airport.h"
 #include "client_place.h"
 
-/*for when file acts as a server*/
+/*server*/
 airport_ret *
 lat_longt_lookup_1_svc(char **argp, struct svc_req *rqstp)
 {
@@ -15,21 +15,22 @@ lat_longt_lookup_1_svc(char **argp, struct svc_req *rqstp)
 
 	/*
 	 * insert server code here
+	 CALL DIRPROG2 HERE
 	 */
 
 	return &result;
 }
 
-/*for when it acts as a client*/
+/*client*/
 void
-dirprog_1(char *host)
+dirprog2_1(char *host)
 {
 	CLIENT *clnt;
 	airport_ret  *result_1;
 	lat_long_input  airport_lookup_1_arg;
 
 #ifndef	DEBUG
-	clnt = clnt_create (host, DIRPROG, DIR_VERS, "udp");
+	clnt = clnt_create (host, DIRPROG2, DIR_VERS, "udp");
 	if (clnt == NULL) {
 		clnt_pcreateerror (host);
 		exit (1);
@@ -45,7 +46,7 @@ dirprog_1(char *host)
 #endif	 /* DEBUG */
 }
 
-
+/*
 int
 main (int argc, char *argv[])
 {
@@ -56,6 +57,6 @@ main (int argc, char *argv[])
 		exit (1);
 	}
 	host = argv[1];
-	dirprog_1 (host);
+	dirprog2_1 (host);
 exit (0);
-}
+}*/

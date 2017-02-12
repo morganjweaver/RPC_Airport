@@ -12,8 +12,8 @@ SOURCES_SVC.c =
 SOURCES_SVC.h = 
 SOURCES.x = place_airport.x
 
-TARGETS_SVC.c = place_airport_svc.c place_airport_server.c place_airport_xdr.c 
-TARGETS_CLNT.c = place_airport_clnt.c place_airport_client.c place_airport_xdr.c 
+TARGETS_SVC.c = place_airport_svc.c place_airport_server.c place_airport_xdr.c client_place_xdr.c
+TARGETS_CLNT.c = place_airport_clnt.c place_airport_client.c place_airport_xdr.c client_place_xdr.c
 TARGETS = place_airport.h place_airport_xdr.c place_airport_clnt.c place_airport_svc.c place_airport_client.c place_airport_server.c
 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)

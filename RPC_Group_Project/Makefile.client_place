@@ -4,7 +4,7 @@
 # Parameters
 
 CLIENT = client_place_client
-SERVER = client_place_server
+SERVER = place_airport_client
 
 SOURCES_CLNT.c = 
 SOURCES_CLNT.h = 
@@ -12,9 +12,9 @@ SOURCES_SVC.c =
 SOURCES_SVC.h = 
 SOURCES.x = client_place.x
 
-TARGETS_SVC.c = client_place_svc.c client_place_server.c client_place_xdr.c 
+TARGETS_SVC.c = client_place_svc.c place_airport_client.c client_place_xdr.c place_airport_clnt.c place_airport_xdr.c
 TARGETS_CLNT.c = client_place_clnt.c client_place_client.c client_place_xdr.c 
-TARGETS = client_place.h client_place_xdr.c client_place_clnt.c client_place_svc.c client_place_client.c client_place_server.c
+TARGETS = client_place.h client_place_xdr.c client_place_clnt.c client_place_svc.c client_place_client.c place_airport_client.c
 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)

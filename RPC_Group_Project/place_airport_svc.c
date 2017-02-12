@@ -17,7 +17,7 @@
 #endif
 
 static void
-dirprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+dirprog2_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
 		lat_long_input airport_lookup_1_arg;
@@ -62,15 +62,15 @@ main (int argc, char **argv)
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (DIRPROG, DIR_VERS);
+	pmap_unset (DIRPROG2, DIR_VERS);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, DIRPROG, DIR_VERS, dirprog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (DIRPROG, DIR_VERS, udp).");
+	if (!svc_register(transp, DIRPROG2, DIR_VERS, dirprog2_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (DIRPROG2, DIR_VERS, udp).");
 		exit(1);
 	}
 
@@ -79,8 +79,8 @@ main (int argc, char **argv)
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, DIRPROG, DIR_VERS, dirprog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (DIRPROG, DIR_VERS, tcp).");
+	if (!svc_register(transp, DIRPROG2, DIR_VERS, dirprog2_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (DIRPROG2, DIR_VERS, tcp).");
 		exit(1);
 	}
 
