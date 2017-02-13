@@ -3,7 +3,7 @@
  * It was generated using rpcgen.
  */
 
-#include "client_place.h"
+#include "place_airport.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <rpc/pmap_clnt.h>
@@ -17,10 +17,10 @@
 #endif
 
 static void
-dirprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+dirprog2_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		string_type lat_longt_lookup_1_arg;
+		lat_long_input airport_lookup_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -31,10 +31,10 @@ dirprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case lat_longt_lookup:
-		_xdr_argument = (xdrproc_t) xdr_string_type;
+	case airport_lookup:
+		_xdr_argument = (xdrproc_t) xdr_lat_long_input;
 		_xdr_result = (xdrproc_t) xdr_airport_ret;
-		local = (char *(*)(char *, struct svc_req *)) lat_longt_lookup_1_svc;
+		local = (char *(*)(char *, struct svc_req *)) airport_lookup_1_svc;
 		break;
 
 	default:
@@ -62,15 +62,15 @@ main (int argc, char **argv)
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (DIRPROG, DIR_VERS);
+	pmap_unset (DIRPROG2, DIR_VERS);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, DIRPROG, DIR_VERS, dirprog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (DIRPROG, DIR_VERS, udp).");
+	if (!svc_register(transp, DIRPROG2, DIR_VERS, dirprog2_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (DIRPROG2, DIR_VERS, udp).");
 		exit(1);
 	}
 
@@ -79,8 +79,8 @@ main (int argc, char **argv)
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, DIRPROG, DIR_VERS, dirprog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (DIRPROG, DIR_VERS, tcp).");
+	if (!svc_register(transp, DIRPROG2, DIR_VERS, dirprog2_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (DIRPROG2, DIR_VERS, tcp).");
 		exit(1);
 	}
 

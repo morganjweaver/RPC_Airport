@@ -26,6 +26,6 @@ union airport_ret switch (int err){
 /*IDL program*/ 
 program DIRPROG {
 	version DIR_VERS {
-		airport_ret lat_longt_lookup(string_type city_state) = 1;
+		airport_ret lat_longt_lookup(string city_state) = 1;
 	} = 1;
 } = 0x31717171;

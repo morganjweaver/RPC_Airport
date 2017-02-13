@@ -4,19 +4,19 @@
  */
 
 #include <memory.h> /* for memset */
-#include "client_place.h"
+#include "place_airport.h"
 
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };
 
 airport_ret *
-lat_longt_lookup_1(string_type *argp, CLIENT *clnt)
+airport_lookup_1(lat_long_input *argp, CLIENT *clnt)
 {
 	static airport_ret clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	if (clnt_call (clnt, lat_longt_lookup,
-		(xdrproc_t) xdr_string_type, (caddr_t) argp,
+	if (clnt_call (clnt, airport_lookup,
+		(xdrproc_t) xdr_lat_long_input, (caddr_t) argp,
 		(xdrproc_t) xdr_airport_ret, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
