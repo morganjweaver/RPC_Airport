@@ -1,4 +1,0 @@
-Design Notes:
-
--Use trie for Places Server as it can have # of letters in alphabet as # of children
--Use KD Tree for Airport lcoation server as this is good for KNN

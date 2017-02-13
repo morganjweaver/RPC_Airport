@@ -1,9 +1,0 @@
-Steps to make the Makefile.client_place work:
-1.) Moved client_place_server.c into place_airport_client.c and DELETED the fromer
-2.) In Makefile.client_place, replaced all "client_place_server.c" references with "place_airport_client.c"
-3.) Added #include "client_place.h" to place_airport.h
-4.) In place_airport_client.c, commented out main (redundant), as DIRPROG2 will be called explicitly  by the SERVER portion of the code (labeled)
-5.) In Makefile.client_place, add to the list of TARGETS_SVC.c: place_airport_clnt.c and place_airport_xdr.c
-6.) In Makefile.place_airport, add to the list of TARGETS_CLNT.c and to TARGETS_SCV.c: client_place_xdr.c
-
-NOTE: Compile Makefile.place_airport first, THEN Makefile.client_place
