@@ -22,6 +22,14 @@ struct airport_node {
 	airport_list next;
 };
 
+static float dist_sq( float *a1, float *a2, int dims ) {
+  double dist_sq = 0, diff;
+  while( --dims >= 0 ) {
+    diff = (a1[dims] - a2[dims]);
+    dist_sq += diff*diff;
+  }
+  return dist_sq;
+}
 
 int main(int argc, char **argv){
 
@@ -67,27 +75,33 @@ int main(int argc, char **argv){
         	
         	float ll_arr[2] = {lat,longi};
         	float *llptr = ll_arr;
-        	assert( 0 == kd_insertf( kdtree, llptr, &airpString ));
+        	assert( 0 == kd_insertf( kdtree, llptr, &airpString[0] ));
         //}
     }
     printf("\nTree populated.  Time to search!");
-    void *presults;
+    
+    struct kdres *presults;
     const float pt[] = {33.0, -80.0};
-    presults = kd_nearest_rangef( kdtree, pt, 10);
+    presults = kd_nearest_rangef( kdtree, pt, 6);
     printf( "found %d results:\n", kd_res_size(presults) );
-    float farr[2];
+    
+    float farr[5];
     //NOW PRINT RESULTS:
+
     char *resptr;
-    while( !kd_res_end( presults ) ) {
-	    /* get the data and position of the current result item */
-	    resptr = (char*)kd_res_itemf( presults, farr );
+   while( !kd_res_end( presults ) ) {
+    /* get the data and position of the current result item */
+    resptr = (char*)kd_res_itemf( presults, farr );
 
+    /* compute the distance of the current result from the pt */
+    float dist = sqrt( dist_sq( pt, farr, 2 ) );
 
-	    /* print out the retrieved data */
-	    printf( "node data=%c\n", *resptr[0] );
+    /* print out the retrieved data */
+    printf( "node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
+	    farr[0], farr[1], dist, resptr );
 
-	    /* go to the next entry */
-	    kd_res_next( presults );
+    /* go to the next entry */
+    kd_res_next( presults );
   }
 
   /* free our tree, results set, and other allocated memory */
