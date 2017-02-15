@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 struct trie_info{
-	double lat;
-	double lon;
+	float lat;
+	float lon;
 };
 typedef struct trie_info trie_info;
 
@@ -102,8 +102,7 @@ search_trie(struct trie_node *root, char * key){
 			}
 		}
 	}
-	return NULL;
-	
+	return NULL;	
 }
 
 trie_node *
@@ -120,7 +119,7 @@ read_into_trie()
 	
 	//for creating the trie 
 	char * city_state = (char *) malloc(68 * sizeof(char));
-	double latitude, longitude; 
+	float latitude, longitude; 
 	struct trie_node * root = (trie_node *) malloc(sizeof(trie_node));
 	
 	//will insert city_state c string and trie_info struct 
@@ -168,7 +167,7 @@ int
 main (int argc, char *argv[])
 {
 	struct trie_node * root = read_into_trie();
-	char p[] = "AL Akron twwn";
+	char p[] = "AL Akron ta";
 	char * ptr = p;
 	//printf("%s\n", ptr);
 	
