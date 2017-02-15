@@ -10,8 +10,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-//global variables (used by both client and server)
-lat_long_input  airport_lookup_1_arg;
+//information stored in the trie 
+//used in both client and server code 
+struct trie_info{
+	double lat;
+	double lon;
+};
+typedef struct trie_info trie_info;
 
 /*
 *
@@ -19,13 +24,12 @@ PLACES CLIENT CODE
 *
 */
 void
-dirprog2_1(char *host)
+dirprog2_1(char *host, trie_info * data)
 {
 	CLIENT *clnt;
 	airport_ret  *result_1;
 	
-	//redefine input variable to be global so server can set it 
-	//lat_long_input  airport_lookup_1_arg;
+	lat_long_input  airport_lookup_1_arg;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, DIRPROG2, DIR_VERS, "udp");
@@ -49,13 +53,8 @@ dirprog2_1(char *host)
 PLACES SERVER CODE
 *
 */
-//helper functions 
-struct trie_info{
-	double lat;
-	double lon;
-};
-typedef struct trie_info trie_info;
 
+//trie nodes 
 struct trie_node{
 	//ascii values, starting at value 32
 	struct trie_node * characters[224];
@@ -65,6 +64,7 @@ struct trie_node{
 typedef struct trie_node trie_node;
 
 //pass a root, the c string containing the string, and the data the string references 
+//returns 1 on successful insert, 0 on failed insert 
 int
 insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 	int length = strlen(key);
@@ -88,6 +88,7 @@ insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 	return 1;
 }
 
+//takes root and key, returns trie_info struct on successful lookup, null on failed 
 trie_info * 
 search_trie(struct trie_node *root, char * key){
 	int length = strlen(key);
@@ -152,6 +153,7 @@ search_trie(struct trie_node *root, char * key){
 	return NULL;	
 }
 
+//called once; reads file into trie 
 trie_node *
 read_into_trie()
 {
@@ -210,12 +212,12 @@ read_into_trie()
 	return root; 
 }
 
+//server function, called by client_place_client.c 
 airport_ret *
 lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 {
 	static airport_ret  result; //this might need to be global?
-    
-	//CALL XDR_FREE HERE-- fix need for & before result
+
 	xdr_free((xdrproc_t) xdr_airport_ret, (char*) &result);
 	
 	//if the root is empty, read in the file. 
@@ -230,10 +232,7 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	strcpy(input, *argp);
 	lat_long = search_trie(root, input);
 	if(lat_long){
-		//airport_lookup_1_arg = (lat_long_input *) malloc(sizeof(lat_long_input));
-		airport_lookup_1_arg.lat = lat_long->lat;
-		airport_lookup_1_arg.longitude = lat_long->lon;
-		dirprog2_1("localhost");
+		dirprog2_1("localhost", lat_long);
 	}
 
 	return &result;
