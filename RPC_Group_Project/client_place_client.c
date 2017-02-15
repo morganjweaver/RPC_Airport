@@ -23,9 +23,9 @@ dirprog_1(char *host, string_type input)
 #endif	/* DEBUG */
 
 	result_1 = lat_longt_lookup_1(&lat_longt_lookup_1_arg, clnt);
-	if (result_1 == (airport_ret *) NULL) {
+	/*if (result_1 == (airport_ret *) NULL) {
 		clnt_perror (clnt, "call failed");
-	}
+	}*/
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */
@@ -36,18 +36,24 @@ int
 main (int argc, char *argv[])
 {
 	char *host;
-
+	printf("Are we at least entering main?\n");
 	if (argc < 4) {
 		printf ("Invalid input: program host city state");
 		exit (1);
 	}
+	
 	host = argv[1];
 	char * city = argv[2];
 	char * state = argv[3];
-	string_type state_city;
-	strcpy(state_city, state);
-	strcat(state_city, city);
 	
-	dirprog_1 (host, state_city);
+	printf("Making it into inputs\n");
+	
+	char * state_city = (char *) malloc(sizeof(city) + sizeof(state));
+	strcpy(state_city, state);
+	strcat(state_city, " ");
+	strcat(state_city, city);
+	string_type input = (string_type) state_city;
+	printf("string to input: %s\n", input);
+	dirprog_1 (host, input);
 	exit (0);
 }

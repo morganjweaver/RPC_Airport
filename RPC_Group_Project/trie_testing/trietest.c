@@ -167,7 +167,7 @@ int
 main (int argc, char *argv[])
 {
 	struct trie_node * root = read_into_trie();
-	char p[] = "AL Akron ta";
+	char p[] = "AL Akron town";
 	char * ptr = p;
 	//printf("%s\n", ptr);
 	

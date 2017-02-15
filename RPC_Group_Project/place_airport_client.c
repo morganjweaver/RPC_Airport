@@ -53,12 +53,17 @@ dirprog2_1(char *host, trie_info * data)
 PLACES SERVER CODE
 *
 */
+//constants
+const int ascii_vals = 224;
+const char FILENAME[] = "test.txt";
+
+//root, initially null
+struct trie_node * root = NULL;
 
 //trie nodes 
 struct trie_node{
 	//ascii values, starting at value 32
 	struct trie_node * characters[224];
-	//lat and long values stored at end of strings 
 	struct trie_info * data; 
 };
 typedef struct trie_node trie_node;
@@ -68,6 +73,10 @@ typedef struct trie_node trie_node;
 int
 insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 	int length = strlen(key);
+	int j;
+	for(j = 0; j < ascii_vals; j++){
+		root->characters[j] = NULL;
+	}
 	struct trie_node * current = root; 
 	
 	int i;
@@ -79,12 +88,17 @@ insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 		//if next node does not exist, create a new one
 		if (!current->characters[c]){
 			struct trie_node * new_node = (trie_node*) malloc(sizeof(trie_node));
+
+			for(j = 0; j < ascii_vals; j++){
+				new_node->characters[j] = NULL;
+			}
 			current->characters[c] = new_node;
 		}
 		current = current->characters[c];	
 	}
 	current->data = data; 
 	
+	//printf("data for %s inserted at: %c. City len: %d\n", key, key[i-1], length);
 	return 1;
 }
 
@@ -93,6 +107,7 @@ trie_info *
 search_trie(struct trie_node *root, char * key){
 	int length = strlen(key);
 	struct trie_node * current = root;
+	printf("key: %s\n", key);
 	
 	int i;
 	for (i = 0; i < length; i++){
@@ -102,6 +117,7 @@ search_trie(struct trie_node *root, char * key){
 		}
 		
 		if (!current->characters[c]){
+			printf("Lost at character: %c\n", key[i]);
 			return NULL; 
 		}
 		current = current->characters[c];
@@ -118,7 +134,7 @@ search_trie(struct trie_node *root, char * key){
 		int count = 0;
 		int j;
 		int val; 
-		for (j = 0; j < 224; j++){
+		for (j = 0; j < ascii_vals; j++){
 			if(current->characters[j]){
 				count++;
 				val = j; 
@@ -158,7 +174,7 @@ trie_node *
 read_into_trie()
 {
 	//for reading in the file 
-	const char * filename = "test.txt";
+	const char * filename = FILENAME;
 	FILE * file = fopen(filename, "r");
 	char * line = (char *) malloc(168 * sizeof(char));
 	char * state = (char *) malloc(3* sizeof(char));
@@ -216,24 +232,28 @@ read_into_trie()
 airport_ret *
 lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 {
+	printf("Made it to server\n");
 	static airport_ret  result; //this might need to be global?
-
+	
 	xdr_free((xdrproc_t) xdr_airport_ret, (char*) &result);
 	
 	//if the root is empty, read in the file. 
-	struct trie_node * root;
 	if(!root){
-			read_into_trie();
+			printf("not root\n");
+			root = read_into_trie();
 	}
-	
+
 	//call search 
 	char * input = (char *) malloc(68 * sizeof(char));
 	struct trie_info * lat_long; 
 	strcpy(input, *argp);
 	lat_long = search_trie(root, input);
-	if(lat_long){
+	
+	printf("lat: %f, long: %f\n", lat_long->lat, lat_long->lon);
+	
+	/*if(lat_long){
 		dirprog2_1("localhost", lat_long);
-	}
+	}*/
 
 	return &result;
 }
