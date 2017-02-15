@@ -8,11 +8,11 @@
 
 
 void
-dirprog_1(char *host)
+dirprog_1(char *host, string_type input)
 {
 	CLIENT *clnt;
 	airport_ret  *result_1;
-	string_type  lat_longt_lookup_1_arg;
+	string_type  lat_longt_lookup_1_arg = input;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, DIRPROG, DIR_VERS, "udp");
@@ -37,11 +37,17 @@ main (int argc, char *argv[])
 {
 	char *host;
 
-	if (argc < 2) {
-		printf ("usage: %s server_host\n", argv[0]);
+	if (argc < 4) {
+		printf ("Invalid input: program host city state");
 		exit (1);
 	}
 	host = argv[1];
-	dirprog_1 (host);
-exit (0);
+	char * city = argv[2];
+	char * state = argv[3];
+	string_type state_city;
+	strcpy(state_city, state);
+	strcat(state_city, city);
+	
+	dirprog_1 (host, state_city);
+	exit (0);
 }
