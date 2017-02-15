@@ -11,7 +11,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <math.h>
-
+#include <stdbool.h>
 #include "kdtree-master/kdtree.h"
 #include "place_airport.h"
 
@@ -117,14 +117,15 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 	    airport_node* n = malloc(sizeof(airport_node));
       	n->latitude = farr[0];
       	n->longitude = farr[1];
-      	n->distance = (string)dist;
-      	n->code = char[4];
-      	n->code = strncpy(resptr, n->code, 3);
-      	n->code[4] = 0;
+      	char* output = (char*)calloc(15);
+		snprintf(output, 15, "%f", dist);
+      	n->distance = output;
+      	n->code = (char*)calloc(6);
+      	strncpy(resptr, n->code, 5);
       	printf("airpoort code: %s", n->code);
-      	n->name = char[50];
+      	n->name = (char*)calloc(50);
       	n->name = resptr;
-      	printf("\n%s\n", n->name);
+      	printf("\nAirport name: %s\n", n->name);
       	n->next = curr;
       	curr = n;
 	    /* print out the retrieved data */
