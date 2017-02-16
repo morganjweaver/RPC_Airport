@@ -1,9 +1,9 @@
 Authors:
 	Morgan Weaver
-		built the airports server (places_airport_server.c)
+		built the airports server (place_airport_server.c)
 	Bailey Strom-Pillar
-		built the places server (places_airport_client.c)
-	Both worked on the client (client_places_client.c) and the build/make work
+		built the places server (place_airport_client.c)
+	Both worked on the client (client_place_client.c) and the build/make work
 GitHub repo:
 	https://github.com/morganjweaver/RPC_Airport 	
 
@@ -12,11 +12,11 @@ Compile in this order:
 	make -f Makefile.places_aiport
 
 To start servers:
-	Start up ./places_airport_server (airports server)
-	Start up ./client_places_client (places server)
+	Start up ./place_airport_server (airports server)
+	Start up ./place_airport_client (places server)
 
 To run client:
-	./client_places_client hostname city statecode 
+	./client_place_client hostname city statecode 
 
 External libraries used:
 	kd-tree: 
