@@ -261,6 +261,8 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	
 	if(lat_long){
 		dirprog2_1("localhost", lat_long);
+	}else{
+		result_1.err = errno;
 	}
 
 	return result_1;
