@@ -113,14 +113,17 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     
     float farr[2]; //holds kdtree values 
     int counter = 0;
-    char *resptr;
+    char *pch;
 
     while( counter <5 && !kd_res_end( presults )) {
 	    // get the data and position of the current result item 
-	    resptr = (char*)kd_res_itemf( presults, farr );
+	    pch = (char*)kd_res_itemf( presults, farr );
 	    //compute the distance of the current result from the pt 
 	      double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
-	      
+	       
+         printf( "Node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
+        farr[0], farr[1], dist, pch );
+
         airport_node* temp = malloc(sizeof(airport_node));
       	temp->latitude = farr[0];
       	temp->longitude = farr[1];
@@ -128,17 +131,16 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 		    snprintf(output, 15, "%f", dist);
       	temp->distance = output;
       	temp->code = (char*)calloc(6,1);
-      	strncpy(resptr, temp->code, 5);
-      	printf("airpoort code: %s", temp->code);
+      	strncpy(pch, temp->code, 5);
+      	//printf("airpoort code: %s", temp->code);
       	temp->name = (char*)calloc(50,1);
-      	temp->name = resptr;
-      	printf("\nAirport name: %s\n", temp->name);
+      	temp->name = pch;
+      	//printf("\nAirport name: %s\n", temp->name);
       	
         temp->next = curr;
       	curr = temp;
 	    //print out the retrieved data 
-	    printf( "node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
-		    farr[0], farr[1], dist, resptr );
+	   
        counter++;
 	    //go to the next entry 
 	    kd_res_next( presults );
@@ -152,6 +154,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
   //free(tail);
   //free(curr);
   
+
   /**airport_list n = result.airport_ret_u.list;
   n = (airport_list) malloc(sizeof(airport_node));
   n->name = "test name";
@@ -159,6 +162,20 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
   n->latitude = 10;
   n->longitude = 20;
   n->next = NULL;
+**/
+
+	//airport_list n= result.airport_ret_u.list;
+	//n = (airport_list) malloc(sizeof(airport_node));
+	/**airport_list * next = &result.airport_ret_u.list;
+	airport_list node = *next = (airport_node*) malloc(sizeof(airport_node));
+	node->name = (string_type) malloc(sizeof(string_type));
+	strcpy(node->name, "test name");
+	next = &(node->next);
+	
+	next = NULL;
+	
+	printf("Name: %s\n", result.airport_ret_u.list->name);
+	if (&result == (airport_ret*)NULL){printf("null result\n");}
 **/
 	return &result;
 }
