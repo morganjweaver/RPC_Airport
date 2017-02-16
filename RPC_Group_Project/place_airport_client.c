@@ -60,7 +60,7 @@ PLACES SERVER CODE
 */
 //constants
 const int ascii_vals = 224;
-const char FILENAME[] = "test.txt";
+const char FILENAME[] = "places2k.txt";
 
 //root, initially null
 struct trie_node * root = NULL;
