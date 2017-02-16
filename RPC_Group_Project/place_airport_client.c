@@ -60,7 +60,7 @@ PLACES SERVER CODE
 */
 //constants
 const int ascii_vals = 224;
-const char FILENAME[] = "places2kshort.txt";
+const char FILENAME[] = "places2k.txt";
 
 //root, initially null
 struct trie_node * root = NULL;
@@ -78,10 +78,7 @@ typedef struct trie_node trie_node;
 int
 insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 	int length = strlen(key);
-	int j;
-	for(j = 0; j < ascii_vals; j++){
-		root->characters[j] = NULL;
-	}
+	
 	struct trie_node * current = root; 
 	
 	int i;
@@ -93,11 +90,10 @@ insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 		//if next node does not exist, create a new one
 		if (!current->characters[c]){
 			struct trie_node * new_node = (trie_node*) malloc(sizeof(trie_node));
-
+			int j;
 			for(j = 0; j < ascii_vals; j++){
 				new_node->characters[j] = NULL;
 			}
-			printf("Created node for letter: %c \n", key[i]);
 			current->characters[c] = new_node;
 		}
 		current = current->characters[c];	
@@ -112,7 +108,6 @@ trie_info *
 search_trie(struct trie_node *root, char * key){
 	int length = strlen(key);
 	struct trie_node * current = root;
-	printf("key: %s\n", key);
 	
 	int i;
 	for (i = 0; i < length; i++){
@@ -122,7 +117,6 @@ search_trie(struct trie_node *root, char * key){
 		}
 		
 		if (!current->characters[c]){
-			printf("Lost at character: %c\n", key[i]);
 			return NULL; 
 		}
 		current = current->characters[c];
@@ -191,6 +185,10 @@ read_into_trie()
 	char * city_state = (char *) malloc(68 * sizeof(char));
 	double latitude, longitude; 
 	struct trie_node * root = (trie_node *) malloc(sizeof(trie_node));
+	int j;
+	for(j = 0; j < ascii_vals; j++){
+		root->characters[j] = NULL;
+	}
 	
 	//will insert city_state c string and trie_info struct 
     while (fgets(line, 167, file)) {
@@ -248,7 +246,7 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	
 	//if the root is empty, read in the file. 
 	if(!root){
-			printf("not root\n");
+			printf("Creating trie\n");
 			root = read_into_trie();
 	}
 
@@ -269,18 +267,3 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	return result_1;
 }
 
-
-/*
-int
-main (int argc, char *argv[])
-{
-	char *host;
-
-	if (argc < 2) {
-		printf ("usage: %s server_host\n", argv[0]);
-		exit (1);
-	}
-	host = argv[1];
-	dirprog2_1 (host);
-exit (0);
-}*/
