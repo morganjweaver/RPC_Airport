@@ -87,7 +87,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 
     if (!kdpop)
     	populate_tree(kdtree);
-	  xdr_free(xdr_airport_ret, &result); 
+	  xdr_free((xdrproc_t)xdr_airport_ret, (char*)&result); 
     struct kdres *presults;
     const float pt[] = {lat, longitude};
     int search_range = 5;
@@ -113,8 +113,8 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 	    resptr = (char*)kd_res_itemf( presults, farr );
 
 	    /* compute the distance of the current result from the pt */
-	    double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
-	    airport_node* n = malloc(sizeof(airport_node));
+	      double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
+	      airport_node* n = malloc(sizeof(airport_node));
       	n->latitude = farr[0];
       	n->longitude = farr[1];
       	char* output = (char*)calloc(15,1);
@@ -141,6 +141,9 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 
   /* free our tree, results set, and other allocated memory */
   kd_res_free( presults );
+  free(tail);
+  free(curr);
+  
 
 	return &result;
 }
