@@ -38,7 +38,7 @@ dirprog_1(char *host, string_type input, char* city, char * state)
 			}
 		}
 		else{
-			perror("Error: ");
+			perror("Error:");
 		}
 	}
 	

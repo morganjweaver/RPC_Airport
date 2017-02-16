@@ -108,7 +108,6 @@ trie_info *
 search_trie(struct trie_node *root, char * key){
 	int length = strlen(key);
 	struct trie_node * current = root;
-	
 	int i;
 	for (i = 0; i < length; i++){
 		int c = (int) key[i] - 32;
@@ -240,7 +239,7 @@ read_into_trie()
 airport_ret *
 lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 {
-	//static airport_ret  result; //this might need to be global?
+	static airport_ret  result; 
 	
 	xdr_free((xdrproc_t) xdr_airport_ret, (char*) &result_1);
 	
@@ -252,18 +251,19 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 
 	//call search 
 	char * input = (char *) malloc(68 * sizeof(char));
-	struct trie_info * lat_long; 
+	struct trie_info * lat_long = NULL; 
 	strcpy(input, *argp);
 	lat_long = search_trie(root, input);
 	
-	printf("lat: %f, long: %f\n", lat_long->lat, lat_long->lon);
-	
 	if(lat_long){
+		printf("lat: %f, long: %f\n", lat_long->lat, lat_long->lon);
 		dirprog2_1("localhost", lat_long);
+		result = *result_1;
 	}else{
-		result_1->err = errno;
+		result.err = errno;
 	}
 
-	return result_1;
+	free(lat_long);
+	return &result;
 }
 
