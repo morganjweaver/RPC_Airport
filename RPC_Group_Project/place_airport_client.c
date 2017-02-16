@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 //information stored in the trie 
 //used in both client and server code 
@@ -59,7 +60,7 @@ PLACES SERVER CODE
 */
 //constants
 const int ascii_vals = 224;
-const char FILENAME[] = "test.txt";
+const char FILENAME[] = "places2k.txt";
 
 //root, initially null
 struct trie_node * root = NULL;
@@ -261,6 +262,8 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	
 	if(lat_long){
 		dirprog2_1("localhost", lat_long);
+	}else{
+		result_1->err = errno;
 	}
 
 	return result_1;

@@ -53,7 +53,6 @@ int
 main (int argc, char *argv[])
 {
 	char *host;
-	printf("Are we at least entering main?\n");
 	if (argc < 4) {
 		printf ("Invalid input: program host city state");
 		exit (1);
@@ -62,8 +61,6 @@ main (int argc, char *argv[])
 	host = argv[1];
 	char * city = argv[2];
 	char * state = argv[3];
-	
-	printf("Making it into inputs\n");
 	
 	char * state_city = (char *) malloc(sizeof(city) + sizeof(state));
 	strcpy(state_city, state);

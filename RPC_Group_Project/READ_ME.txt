@@ -3,7 +3,9 @@ Authors:
 		built the airports server (places_airport_server.c)
 	Bailey Strom-Pillar
 		built the places server (places_airport_client.c)
-	Both worked on the client (client_places_client.c) and the build/make work 	
+	Both worked on the client (client_places_client.c) and the build/make work
+GitHub repo:
+	https://github.com/morganjweaver/RPC_Airport 	
 
 Compile in this order: 
 	make -f Makefile.client_places
