@@ -96,7 +96,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     const float pt[] = {lat, longitude};
     int search_range = 5;
 
-    presults = kd_nearest_rangef( kdtree, pt, search_range);
+ /*   presults = kd_nearest_rangef( kdtree, pt, search_range);
 
     airport_node* tail = malloc(sizeof(airport_node));
     airport_node* curr = tail;
@@ -115,9 +115,9 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     char *resptr;
 
     while( counter <5 && !kd_res_end( presults )) {
-	    /* get the data and position of the current result item */
+	    // get the data and position of the current result item 
 	    resptr = (char*)kd_res_itemf( presults, farr );
-	    /* compute the distance of the current result from the pt */
+	    //compute the distance of the current result from the pt 
 	      double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
 	      airport_node* n = malloc(sizeof(airport_node));
       	n->latitude = farr[0];
@@ -133,22 +133,29 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
       	printf("\nAirport name: %s\n", n->name);
       	n->next = curr;
       	curr = n;
-	    /* print out the retrieved data */
+	    //print out the retrieved data 
 	    printf( "node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
 		    farr[0], farr[1], dist, resptr );
        counter++;
-	    /* go to the next entry */
+	    //go to the next entry 
 	    kd_res_next( presults );
   }
     counter = 0;
     result.err = errno;
     result.airport_ret_u.list = curr;
 
-  /* free our tree, results set, and other allocated memory */
+  // free our tree, results set, and other allocated memory 
   kd_res_free( presults );
   free(tail);
-  free(curr);
+  free(curr);*/
   
+  airport_list n = result.airport_ret_u.list;
+  n = (airport_list) malloc(sizeof(airport_node));
+  n->name = "test name";
+  n->distance = "100 miles";
+  n->latitude = 10;
+  n->longitude = 20;
+  n->next = NULL;
 
 	return &result;
 }
