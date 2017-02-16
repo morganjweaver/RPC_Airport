@@ -5,7 +5,7 @@
  */
 
 #include "client_place.h"
-
+#include <errno.h>
 
 void
 dirprog_1(char *host, string_type input)
@@ -13,6 +13,7 @@ dirprog_1(char *host, string_type input)
 	CLIENT *clnt;
 	airport_ret  *result_1;
 	string_type  lat_longt_lookup_1_arg = input;
+	airport_list current;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, DIRPROG, DIR_VERS, "udp");
@@ -27,6 +28,17 @@ dirprog_1(char *host, string_type input)
 		clnt_perror (clnt, "call failed");
 	}else{
 		printf("We did it!");
+		errno = result_1->err;
+		if (errno == 0){
+			current = result_1->airport_ret_u.list;
+			while (current != NULL){
+				printf("code: %s name: %s latitude: %f longitude: %f distance: %s");
+				current = current->next;
+			}
+		}
+		else{
+			perror("Error: ");
+		}
 	}
 	
 	
