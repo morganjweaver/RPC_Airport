@@ -20,6 +20,7 @@ OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
 CFLAGS += -g -std=c99
 # Not needed in osx
 #LDLIBS += -lnsl
+LDLIBS += kdtree-master/libkdtree.a
 RPCGENFLAGS = 
 
 # Targets 

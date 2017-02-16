@@ -32,13 +32,13 @@ void populate_tree(void *treeptr){
     ssize_t read;
     treeptr = kd_create(2);
 
-    fp = fopen("airport-locations.txt", "r");
+    fp = fopen("places/airport-locations.txt", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
     //get rid of first line:
     read = getline(&line, &len, fp);
     //printf("%s", line);
-    while(read = getline(&line, &len, fp) != -1) {
+    while((read = getline(&line, &len, fp)) != -1) {
     	
         printf("%s", line);
 	        
@@ -82,7 +82,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 {
 	float lat = argp->lat;
 	float longitude = argp->longitude;
-
+    errno = 0;
 	static airport_ret  result;
 
     if (!kdpop)
@@ -98,9 +98,9 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     tail->next = NULL;
 
     //printf( "found %d results:\n", kd_res_size(presults) );
-    curr = &result.airport_ret_u.list;
+    curr = result.airport_ret_u.list;
 
-    while (kd_res_size(presults < 5)){
+    while ((kd_res_size(presults) < 5)){
     	search_range *= 2;
     	presults = kd_nearest_rangef( kdtree, pt, search_range);
     }
@@ -113,17 +113,17 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 	    resptr = (char*)kd_res_itemf( presults, farr );
 
 	    /* compute the distance of the current result from the pt */
-	    double dist = spherical_miles(pt[0], pt[2], farr[0], farr[1]);
+	    double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
 	    airport_node* n = malloc(sizeof(airport_node));
       	n->latitude = farr[0];
       	n->longitude = farr[1];
-      	char* output = (char*)calloc(15);
+      	char* output = (char*)calloc(15,1);
 		snprintf(output, 15, "%f", dist);
       	n->distance = output;
-      	n->code = (char*)calloc(6);
+      	n->code = (char*)calloc(6,1);
       	strncpy(resptr, n->code, 5);
       	printf("airpoort code: %s", n->code);
-      	n->name = (char*)calloc(50);
+      	n->name = (char*)calloc(50,1);
       	n->name = resptr;
       	printf("\nAirport name: %s\n", n->name);
       	n->next = curr;
@@ -135,6 +135,8 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 	    /* go to the next entry */
 	    kd_res_next( presults );
   }
+    result.err = errno;
+    result.airport_ret_u.list = curr;
 
   /* free our tree, results set, and other allocated memory */
   kd_res_free( presults );
