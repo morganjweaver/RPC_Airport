@@ -26,35 +26,31 @@ double spherical_miles(float c_lat, float c_long, float res_lat, float res_long)
 }
 
 void populate_tree(){
-    printf("\n\n***About to populate tree***");
-	  FILE * fp;
+	FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
     kdtree = kd_create(2);
 
     fp = fopen("places/airport-locations.txt", "r");
-    if (fp == NULL){
-        perror("Error detected ");
+    if (fp == NULL)
         exit(EXIT_FAILURE);
-      }
     //get rid of first line:
     read = getline(&line, &len, fp);
-    printf("%s", line);
-   /** while((read = getline(&line, &len, fp)) != -1) {
-    	
-        printf("\nCURRENT LINE: %s", line);
-	        
+    //printf("%s", line);
+    while((read = getline(&line, &len, fp)) != -1) {
+        //printf("%s", line);
+	
         float lat = 0; 
         float longi = 0;
         char *airpString = malloc(sizeof(char[50]));
         char *pch;
         pch = strtok (line," ");
-        printf ("First token: %s\n",pch);
+        //printf ("%s\n",pch);
 		
 		while (pch != NULL){
-		    //printf ("\nThis token: %s\n",pch);
-		    /**if (isdigit(pch[0]) || pch[0] == '-'){
+		   //printf ("\nThis token: %s\n",pch);
+		    if (isdigit(pch[0]) || pch[0] == '-'){
         		if(lat != 0){
         			longi = atof(pch);
         		} else{
@@ -62,22 +58,24 @@ void populate_tree(){
         		}
         	} else{
         		strcat(airpString, pch);
-        		printf("\nCurrent string: %s", airpString);
+        		//printf("\nCurrent string: %s", airpString);
         	}
+			//printf("end of while\n");
+			
 		    pch = strtok (NULL, " ");
+		//	printf("after strtok\n");
 		  }
+		 // printf("outside while loop\n");
     	
     	float ll_arr[2] = {lat,longi};
     	float *llptr = ll_arr;
+	//	printf("just before assert\n");
     	assert( 0 == kd_insertf( kdtree, llptr, &airpString[0] ));
-       **/
-      //printf ("%s\n",pch);
-      // pch = strtok (NULL, " ");
-   // }
+	//	printf("Just after assert\n");
+    }
     //printf("\nTree populated. Time to search!");
     //struct kdres *presults;
   //kd_free( kdtree );
-    kdpop = true;
   fclose(fp);
   if (line)
     free(line);
@@ -86,25 +84,20 @@ void populate_tree(){
 airport_ret *
 airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 {
-	 float lat = argp->lat;
-	 float longitude = argp->longitude;
-   printf("Lat: %f  Long: %f\n", lat, longitude);
+	float lat = argp->lat;
+	float longitude = argp->longitude;
     errno = 0;
 	  static airport_ret  result;
-    double distest = spherical_miles(45, 70, 45, 60);
-    printf("Testing spherical miles: %d\n", distest);
 
-    //if (!kdpop)
-    	//populate_tree();
-
-	  xdr_free((xdrproc_t)xdr_airport_ret, (char*)&result); 
-    
-    /**
+    if (!kdpop)
+    	populate_tree();
+	 xdr_free((xdrproc_t)xdr_airport_ret, (char*)&result); 
     struct kdres *presults;
     const float pt[] = {lat, longitude};
     int search_range = 5;
+
     presults = kd_nearest_rangef( kdtree, pt, search_range);
-    
+
     airport_node* tail = malloc(sizeof(airport_node));
     airport_node* curr = tail;
     tail->next = NULL;
@@ -120,15 +113,12 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     float farr[3]; //holds kdtree values 
     int counter = 0;
     char *resptr;
-    while( counter <=5 || !kd_res_end( presults ) ) {
-      **/
-	    /* get the data and position of the current result item */
-	    
-   //   resptr = (char*)kd_res_itemf( presults, farr );
 
+    while( counter <5 && !kd_res_end( presults )) {
+	    /* get the data and position of the current result item */
+	    resptr = (char*)kd_res_itemf( presults, farr );
 	    /* compute the distance of the current result from the pt */
-	   /**
-        double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
+	      double dist = spherical_miles(pt[0], pt[1], farr[0], farr[1]);
 	      airport_node* n = malloc(sizeof(airport_node));
       	n->latitude = farr[0];
       	n->longitude = farr[1];
@@ -143,30 +133,21 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
       	printf("\nAirport name: %s\n", n->name);
       	n->next = curr;
       	curr = n;
-        **/
 	    /* print out the retrieved data */
-	    /**
-      printf( "node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
+	    printf( "node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
 		    farr[0], farr[1], dist, resptr );
        counter++;
-       **/
 	    /* go to the next entry */
-	    //kd_res_next( presults );
- // }
-    //counter = 0;
-
+	    kd_res_next( presults );
+  }
+    counter = 0;
     result.err = errno;
-    airport_node* n = malloc(sizeof(airport_node));
-    n->latitude = 123;
-    n->longitude = 232;
-    n->distance = 3;
-    n->name = "Malibu, CA";
-    result.airport_ret_u.list = n;
+    result.airport_ret_u.list = curr;
 
   /* free our tree, results set, and other allocated memory */
- // kd_res_free( presults );
-  //free(tail);
-  //free(curr);
+  kd_res_free( presults );
+  free(tail);
+  free(curr);
   
 
 	return &result;
