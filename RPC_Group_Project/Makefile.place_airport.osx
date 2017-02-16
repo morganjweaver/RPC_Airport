@@ -17,7 +17,7 @@ TARGETS = place_airport.h place_airport_xdr.c place_airport_clnt.c place_airport
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
 # Compiler flags 
 
-CFLAGS += -g -std=c99
+CFLAGS += -g #-std=c99
 # Not needed in osx
 #LDLIBS += -lnsl
 LDLIBS += kdtree-master/libkdtree.a
