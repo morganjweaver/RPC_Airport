@@ -25,6 +25,8 @@ dirprog_1(char *host, string_type input)
 	result_1 = lat_longt_lookup_1(&lat_longt_lookup_1_arg, clnt);
 	if (result_1 == (airport_ret *) NULL) {
 		clnt_perror (clnt, "call failed");
+	}else{
+		printf("We did it!");
 	}
 	
 	
