@@ -258,7 +258,9 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	if(lat_long){
 		printf("lat: %f, long: %f\n", lat_long->lat, lat_long->lon);
 		dirprog2_1("localhost", lat_long);
-		result = *result_1;
+		if(result_1){
+			result = *result_1;
+		}
 	}else{
 		result.err = errno;
 	}
