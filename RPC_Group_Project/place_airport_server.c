@@ -98,7 +98,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     tail->next = NULL;
 
     //printf( "found %d results:\n", kd_res_size(presults) );
-    curr = result.airport_ret_u.list;
+    //curr = &result.airport_ret_u.list;
 
     while ((kd_res_size(presults) < 5)){
     	search_range *= 2;
