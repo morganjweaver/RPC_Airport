@@ -23,9 +23,11 @@ dirprog_1(char *host, string_type input)
 #endif	/* DEBUG */
 
 	result_1 = lat_longt_lookup_1(&lat_longt_lookup_1_arg, clnt);
-	/*if (result_1 == (airport_ret *) NULL) {
+	if (result_1 == (airport_ret *) NULL) {
 		clnt_perror (clnt, "call failed");
-	}*/
+	}
+	
+	
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */

@@ -23,13 +23,17 @@ typedef struct trie_info trie_info;
 PLACES CLIENT CODE
 *
 */
+//global so that server can access to send back to user-end client 
+airport_ret  *result_1;
 void
 dirprog2_1(char *host, trie_info * data)
 {
 	CLIENT *clnt;
-	airport_ret  *result_1;
 	
 	lat_long_input  airport_lookup_1_arg;
+	
+	airport_lookup_1_arg.lat = data->lat;
+	airport_lookup_1_arg.longitude = data->lon;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, DIRPROG2, DIR_VERS, "udp");
@@ -225,6 +229,11 @@ read_into_trie()
     }
 
 	fclose(file);
+	free(line);
+	free(state);
+	free(city);
+	free(lat);
+	free(lon);
 	return root; 
 }
 
@@ -232,10 +241,9 @@ read_into_trie()
 airport_ret *
 lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 {
-	printf("Made it to server\n");
-	static airport_ret  result; //this might need to be global?
+	//static airport_ret  result; //this might need to be global?
 	
-	xdr_free((xdrproc_t) xdr_airport_ret, (char*) &result);
+	xdr_free((xdrproc_t) xdr_airport_ret, (char*) &result_1);
 	
 	//if the root is empty, read in the file. 
 	if(!root){
@@ -251,11 +259,11 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	
 	printf("lat: %f, long: %f\n", lat_long->lat, lat_long->lon);
 	
-	/*if(lat_long){
+	if(lat_long){
 		dirprog2_1("localhost", lat_long);
-	}*/
+	}
 
-	return &result;
+	return result_1;
 }
 
 
