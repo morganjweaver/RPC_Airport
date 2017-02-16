@@ -27,9 +27,9 @@ dirprog_1(char *host, string_type input, char* city, char * state)
 	if (result_1 == (airport_ret *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}else{
-		printf("We did it!");
 		errno = result_1->err;
 		if (errno == 0){
+			printf("thinks it's 0");
 			current = result_1->airport_ret_u.list;
 			while (current != NULL){
 				printf("%s, %s: %f, %f\n", city, state, current->latitude, current->longitude);

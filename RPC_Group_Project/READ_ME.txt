@@ -19,7 +19,7 @@ To run client:
 	./client_place_client hostname city statecode 
 
 External libraries used:
-	kd-tree: 
+	kd-tree: https://github.com/jtsiomb/kdtree
 
 Algorithms:
 	places server: trie (insert and search functions implemented) for looking up lat/long given city/statecode
