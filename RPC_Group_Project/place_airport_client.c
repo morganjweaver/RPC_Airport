@@ -60,7 +60,7 @@ PLACES SERVER CODE
 */
 //constants
 const int ascii_vals = 224;
-const char FILENAME[] = "places2k.txt";
+const char FILENAME[] = "places2kshort.txt";
 
 //root, initially null
 struct trie_node * root = NULL;
@@ -97,13 +97,13 @@ insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 			for(j = 0; j < ascii_vals; j++){
 				new_node->characters[j] = NULL;
 			}
+			printf("Created node for letter: %c \n", key[i]);
 			current->characters[c] = new_node;
 		}
 		current = current->characters[c];	
 	}
 	current->data = data; 
 	
-	//printf("data for %s inserted at: %c. City len: %d\n", key, key[i-1], length);
 	return 1;
 }
 

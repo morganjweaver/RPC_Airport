@@ -21,6 +21,10 @@ int
 insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 	int length = strlen(key);
 	struct trie_node * current = root; 
+	int j;
+	for(j = 0; j < 224; j++){
+		root->characters[j] = NULL;
+	}
 	
 	int i;
 	for (i = 0; i < length; i++){
@@ -31,7 +35,11 @@ insert_trie(struct trie_node * root, char * key, struct trie_info * data){
 		//if next node does not exist, create a new one
 		if (!current->characters[c]){
 			struct trie_node * new_node = (trie_node*) malloc(sizeof(trie_node));
+			for(j = 0; j < 224; j++){
+				new_node->characters[j] = NULL;
+			}
 			current->characters[c] = new_node;
+			printf("Created node for letter: %c \n", key[i]);
 		}
 		current = current->characters[c];	
 	}
@@ -167,7 +175,7 @@ int
 main (int argc, char *argv[])
 {
 	struct trie_node * root = read_into_trie();
-	char p[] = "AL Akron town";
+	char p[] = "AL Abbeville city";
 	char * ptr = p;
 	//printf("%s\n", ptr);
 	
