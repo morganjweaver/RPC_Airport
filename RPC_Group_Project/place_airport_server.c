@@ -149,13 +149,17 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
   free(tail);
   free(curr);*/
   
-  airport_list n = result.airport_ret_u.list;
-  n = (airport_list) malloc(sizeof(airport_node));
-  n->name = "test name";
-  n->distance = "100 miles";
-  n->latitude = 10;
-  n->longitude = 20;
-  n->next = NULL;
-
+	//airport_list n= result.airport_ret_u.list;
+	//n = (airport_list) malloc(sizeof(airport_node));
+	airport_list * next = &result.airport_ret_u.list;
+	airport_list node = *next = (airport_node*) malloc(sizeof(airport_node));
+	node->name = (string_type) malloc(sizeof(string_type));
+	strcpy(node->name, "test name");
+	next = &(node->next);
+	
+	next = NULL;
+	
+	printf("Name: %s\n", result.airport_ret_u.list->name);
+	if (&result == (airport_ret*)NULL){printf("null result\n");}
 	return &result;
 }

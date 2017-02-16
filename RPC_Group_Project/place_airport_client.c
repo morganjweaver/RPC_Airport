@@ -46,6 +46,7 @@ dirprog2_1(char *host, trie_info * data)
 
 	result_1 = airport_lookup_1(&airport_lookup_1_arg, clnt);
 	if (result_1 == (airport_ret *) NULL) {
+		printf("Null return\n");
 		clnt_perror (clnt, "call failed");
 	}
 #ifndef	DEBUG
@@ -258,12 +259,18 @@ lat_longt_lookup_1_svc(string_type *argp, struct svc_req *rqstp)
 	if(lat_long){
 		printf("lat: %f, long: %f\n", lat_long->lat, lat_long->lon);
 		dirprog2_1("localhost", lat_long);
-		if(result_1){
-			result = *result_1;
+		if(result_1 != NULL){
+			airport_list current = result_1->airport_ret_u.list;
+			if (current == NULL){
+				printf("current is null\n");
+			}
+			return result_1;
+		}else{
+			printf("result null\n");
 		}
-	}else{
-		result.err = errno;
 	}
+	
+	result.err = errno;
 
 	free(lat_long);
 	return &result;
