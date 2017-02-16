@@ -32,7 +32,7 @@ void populate_tree(){
     ssize_t read;
     kdtree = kd_create(2);
 
-    fp = fopen("places/airport-locations.txt", "r");
+    fp = fopen("airport-locations.txt", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
     //get rid of first line:
@@ -98,11 +98,11 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 
     presults = kd_nearest_rangef( kdtree, pt, search_range);
     
-    airport_list n = result.airport_ret_u.list;
+    //airport_list n = result.airport_ret_u.list;
     airport_node* tail = malloc(sizeof(airport_node));
     airport_node* curr = tail;
     tail->next = NULL;
-
+	curr = result.airport_ret_u.list;
     //printf( "found %d results:\n", kd_res_size(presults) );
     //curr = &result.airport_ret_u.list;
 
