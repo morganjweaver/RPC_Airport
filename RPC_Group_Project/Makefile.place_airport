@@ -20,9 +20,9 @@ TARGETS = place_airport.h place_airport_xdr.c place_airport_clnt.c place_airport
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
 # Compiler flags 
 
+kdlib = kdtree-master/libkdtree.a
 CFLAGS += -g #-std=c99
-LDLIBS += -lnsl -lm -libkdtree 
-LDLIBS += kdtree-master/libkdtree.a
+LDLIBS += -lnsl -lm $(kdlib)   kdtree-master/kdtree.h kdtree-master/kdtree.c
 RPCGENFLAGS = 
 
 # Targets 
