@@ -83,11 +83,11 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 	float lat = argp->lat;
 	float longitude = argp->longitude;
     errno = 0;
-	static airport_ret  result;
+	  static airport_ret  result;
 
     if (!kdpop)
     	populate_tree(kdtree);
-	
+	  xdr_free(xdr_airport_ret, &result); 
     struct kdres *presults;
     const float pt[] = {lat, longitude};
     int search_range = 5;
@@ -106,9 +106,9 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     }
     
     float farr[3]; //holds kdtree values 
-    
+    int counter = 0;
     char *resptr;
-    while( !kd_res_end( presults ) ) {
+    while( counter <=5 || !kd_res_end( presults ) ) {
 	    /* get the data and position of the current result item */
 	    resptr = (char*)kd_res_itemf( presults, farr );
 
@@ -118,7 +118,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
       	n->latitude = farr[0];
       	n->longitude = farr[1];
       	char* output = (char*)calloc(15,1);
-		snprintf(output, 15, "%f", dist);
+		    snprintf(output, 15, "%f", dist);
       	n->distance = output;
       	n->code = (char*)calloc(6,1);
       	strncpy(resptr, n->code, 5);
@@ -131,10 +131,11 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
 	    /* print out the retrieved data */
 	    printf( "node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
 		    farr[0], farr[1], dist, resptr );
-
+       counter++;
 	    /* go to the next entry */
 	    kd_res_next( presults );
   }
+    counter = 0;
     result.err = errno;
     result.airport_ret_u.list = curr;
 
