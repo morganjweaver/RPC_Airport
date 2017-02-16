@@ -134,8 +134,8 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
       	temp->code = (char*)calloc(6,1);
       	strncpy(pch, temp->code, 5);
         
-        char* name_output = (char*)calloc(50,1);
-        snprintf(name_output, 50, "%s", pch[5]);
+        char* name_output = (char*)calloc(50,sizeof(char));
+        snprintf(name_output, 50, "%s", pch);
         temp->name = name_output;
         
         temp->code = (char*)calloc(6,1);
