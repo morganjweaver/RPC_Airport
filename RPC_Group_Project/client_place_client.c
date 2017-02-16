@@ -8,7 +8,7 @@
 #include <errno.h>
 
 void
-dirprog_1(char *host, string_type input)
+dirprog_1(char *host, string_type input, char* city, char * state)
 {
 	CLIENT *clnt;
 	airport_ret  *result_1;
@@ -32,7 +32,8 @@ dirprog_1(char *host, string_type input)
 		if (errno == 0){
 			current = result_1->airport_ret_u.list;
 			while (current != NULL){
-				printf("code: %s name: %s latitude: %f longitude: %f distance: %s");
+				printf("%s, %s: %f, %f\n", city, state, current->latitude, current->longitude);
+				printf("code: %s, name: %s, distance: %s", current->name, current->distance);
 				current = current->next;
 			}
 		}
@@ -70,6 +71,6 @@ main (int argc, char *argv[])
 	strcat(state_city, city);
 	string_type input = (string_type) state_city;
 	printf("string to input: %s\n", input);
-	dirprog_1 (host, input);
+	dirprog_1 (host, input, city, state);
 	exit (0);
 }
