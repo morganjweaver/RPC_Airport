@@ -34,8 +34,8 @@ dirprog_1(char *host, string_type input, char* city, char * state)
 				printf("why is current null\n");
 			}
 			while (current != NULL){
-				printf("%s, %s: %f, %f\n", city, state, current->latitude, current->longitude);
-				printf("code: %s, name: %s, distance: %s", current->name, current->distance);
+				printf("%s: %f, %f\n", current->name, current->latitude, current->longitude);
+				//printf("code: %s, name: %s, distance: %s", current->name, current->distance);
 				current = current->next;
 			}
 		}
