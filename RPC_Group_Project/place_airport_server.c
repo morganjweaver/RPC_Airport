@@ -124,17 +124,19 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
          printf( "Node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
         farr[0], farr[1], dist, pch );
 
-        airport_node* temp = malloc(sizeof(airport_node));
-      	temp->latitude = farr[0];
-      	temp->longitude = farr[1];
-      	char* output = (char*)calloc(15,1);
-		    snprintf(output, 15, "%f", dist);
-      	temp->distance = output;
-      	temp->code = (char*)calloc(6,1);
-      	strncpy(pch, temp->code, 5);
+    airport_node* temp = malloc(sizeof(airport_node));
+        temp->latitude = farr[0];
+        temp->longitude = farr[1];
+        char* output = (char*)calloc(15,1);
+        snprintf(output, 15, "%f", dist);
+        temp->distance = output;
+        temp->code = (char*)calloc(6,1);
+        strncpy(temp->code, pch, 5);
+
       	//printf("airpoort code: %s", temp->code);
       	temp->name = (char*)calloc(50,1);
-      	temp->name = pch;
+      	strncpy(temp->name, pch+6, 49);
+        //temp->name = pch;
       	//printf("\nAirport name: %s\n", temp->name);
       	
         temp->next = curr;
