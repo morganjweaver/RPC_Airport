@@ -84,8 +84,6 @@ void populate_tree(){
 fclose(fp);
 if (line)
   free(line);
-if(airpString)
-  free(airpString);
 }
 
 airport_ret *
