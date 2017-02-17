@@ -25,6 +25,9 @@ External libraries used:
 Algorithms:
 	places server: trie (insert and search functions implemented) for looking up lat/long given city/statecode
 	airport server: kd-tree for looking up airports given lat/long 
+
+Known issues:
+	Airport server returns 5 nearby airports, but not the 5 CLOSEST
 	
 Strengths:
 	Designing algorithms and working with data structures
