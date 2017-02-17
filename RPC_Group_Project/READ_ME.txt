@@ -1,9 +1,10 @@
 Authors:
 	Morgan Weaver
-		built the airports server (place_airport_server.c)
+		built the airports server (place_airport_server.c), kd-tree library, bug fixing
 	Bailey Strom-Pillar
-		built the places server (place_airport_client.c)
-	Both worked on the client (client_place_client.c) and the build/make work
+		built the places server (place_airport_client.c), built trie, the client (client_place_client.c) 
+	Both worked on and the build/make work
+
 GitHub repo:
 	https://github.com/morganjweaver/RPC_Airport 	
 
@@ -29,4 +30,4 @@ Strengths:
 	Designing algorithms and working with data structures
 
 Weaknesses:
-	Build work with makefiles 
+	Build work with makefiles, C 
