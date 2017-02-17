@@ -212,11 +212,11 @@ read_into_trie()
 		strcat(city_state, city);
 		
 		//getting lat and long info 
-		strncpy(lat, line+143, 10);
+		strncpy(lat, line+143, 9);
 		lat[10] = '\0';
 		latitude = atof(lat);
 		
-		strncpy(lon, line+154, 10);
+		strncpy(lon, line+153, 9);
 		lon[10] = '\0';
 		longitude = atof(lon);
 		
