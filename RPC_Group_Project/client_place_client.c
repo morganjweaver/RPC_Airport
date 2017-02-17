@@ -39,6 +39,7 @@ dirprog_1(char *host, string_type input, char* city, char * state)
 			}
 		}
 		else{
+			printf("Invalid entry\n");
 			perror("Error:");
 		}
 	}
