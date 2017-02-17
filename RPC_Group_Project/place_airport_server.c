@@ -104,7 +104,7 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
  xdr_free((xdrproc_t)xdr_airport_ret, (char*)&result); 
  struct kdres *presults;
  const float pt[] = {lat, longitude};
- int search_range = 0;
+ double  search_range = .15;
  presults = kd_nearest_rangef( kdtree, pt, search_range);
  airport_node* tail = malloc(sizeof(airport_node));
  airport_node* curr = tail;
@@ -112,36 +112,8 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
  curr = result.airport_ret_u.list;
  printf( "found %d results:\n", kd_res_size(presults) );
  
- if(kd_res_size(presults) ==1){
-  counter++;
-  pch = (char*)kd_res_itemf( presults, farr );
-  double dist = distance((double)pt[0], (double)pt[1], (double)farr[0], (double)farr[1], 'M');
-  printf( "Node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
-  farr[0], farr[1], dist, pch );
-  airport_node* temp = malloc(sizeof(airport_node));
-  temp->latitude = farr[0];
-  temp->longitude = farr[1];
-  char* output = (char*)calloc(15,1);
-  snprintf(output, 15, "%f", dist);
-  temp->distance = output;
-  temp->code = (char*)calloc(6,1);
-  strcpy(temp->code, pch);
-  temp->name = (char*)calloc(64,1);
-  strncpy(temp->name, pch+6, 63);
-  int i = 0;
-     while(isalpha(temp->name[i]) || ispunct(temp->name[i])) {
-      i++;
-    }
-    temp->name[i] = '\0';
-    temp->next = curr;
-    curr = temp;
-      //print out the retrieved data 
-    counter++;
-    kd_res_next( presults );
- }
-
  while ((kd_res_size(presults) < 5)){
-   search_range += 1;
+   search_range *= 2;
    presults = kd_nearest_rangef( kdtree, pt, search_range);
  }
     while( counter <5 && !kd_res_end( presults )) {
@@ -149,10 +121,8 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
      pch = (char*)kd_res_itemf( presults, farr );
 	    //compute the distance of the current result from the pt 
      double dist = distance((double)pt[0], (double)pt[1], (double)farr[0], (double)farr[1], 'M');
-
      printf( "Node at (%.3f, %.3f) is %.3f away and has data=%s\n", 
       farr[0], farr[1], dist, pch );
-
      airport_node* temp = malloc(sizeof(airport_node));
      temp->latitude = farr[0];
      temp->longitude = farr[1];
@@ -170,16 +140,13 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
     temp->name[i] = '\0';
     temp->next = curr;
     curr = temp;
-	    //print out the retrieved data 
     counter++;
     kd_res_next( presults );
   }
   counter = 0;
   result.err = errno;
   result.airport_ret_u.list = curr;
-  // free our tree, results set, and other allocated memory 
   kd_res_free( presults );
-  //free(tail);
-  //free(curr);
+  
   return &result;
 }
