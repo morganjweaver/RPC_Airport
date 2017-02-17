@@ -131,11 +131,11 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
         snprintf(output, 15, "%f", dist);
         temp->distance = output;
         temp->code = (char*)calloc(6,1);
-        strncpy(temp->code, pch, 5);
+        strcpy(temp->code, pch);
 
       	//printf("airpoort code: %s", temp->code);
       	temp->name = (char*)calloc(50,1);
-      	strncpy(temp->name, pch+6, 49);
+      	strcpy(temp->name, pch+6);
         //temp->name = pch;
       	//printf("\nAirport name: %s\n", temp->name);
       	
