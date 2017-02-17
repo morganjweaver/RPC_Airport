@@ -134,8 +134,13 @@ airport_lookup_1_svc(lat_long_input *argp, struct svc_req *rqstp)
         strcpy(temp->code, pch);
 
       	//printf("airpoort code: %s", temp->code);
-      	temp->name = (char*)calloc(50,1);
-      	strcpy(temp->name, pch+6);
+      	temp->name = (char*)calloc(64,1);
+      	strncpy(temp->name, pch+6, 63);
+        int i = 0;
+        while(isalpha(temp->name[i]) || ispunct(temp->name[i])) {
+          i++;
+        }
+        temp->name[i] = '\0';
         //temp->name = pch;
       	//printf("\nAirport name: %s\n", temp->name);
       	
