@@ -33,8 +33,14 @@ dirprog_1(char *host, string_type input, char* city, char * state)
 			if (current==NULL){
 				printf("why is current null\n");
 			}
+<<<<<<< HEAD
 			while (current != NULL){	
 				printf("Airport:%sLatitude: %f, Longitude: %f, Distance: %s miles\n\n", current->code, current->latitude, current->longitude, current->distance);
+=======
+			while (current != NULL){
+				
+				printf("Code: %s, City/State: %s, Latitude: %f, Longitude: %f, Distance: %s miles\n", current->code, current->name, current->latitude, current->longitude, current->distance);
+>>>>>>> parent of 594639b... Client printing beautifully now
 				current = current->next;
 			}
 		}
